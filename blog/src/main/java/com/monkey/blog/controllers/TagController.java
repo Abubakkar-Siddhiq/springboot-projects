@@ -6,6 +6,7 @@ import com.monkey.blog.domain.entity.Tag;
 import com.monkey.blog.mappers.TagMapper;
 import com.monkey.blog.services.TagService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +31,12 @@ public class TagController {
     public ResponseEntity<List<TagResponse>> createTags(
             @RequestBody CreateTagsRequest createTagsRequest
             ) {
+        List<Tag> savedTags = tagService.createTags(createTagsRequest.getNames());
+        List<TagResponse> createdTagResponses = savedTags.stream().map(tagMapper::toTagResponse).toList();
 
+        return new ResponseEntity<>(
+                createdTagResponses,
+                HttpStatus.CREATED
+        );
     }
 }

@@ -3,11 +3,15 @@ package com.monkey.blog.services.impl;
 import com.monkey.blog.domain.entity.Tag;
 import com.monkey.blog.repositories.TagRepository;
 import com.monkey.blog.services.TagService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -20,8 +24,27 @@ public class TagServiceImpl implements TagService {
         return tagRepository.findAllWithPostCount();
     }
 
+    @Transactional
     @Override
     public List<Tag> createTags(Set<String> tagNames) {
-        return List.of();
+        List<Tag> existingTags = tagRepository.findByNameIn(tagNames);
+        Set<String> existingTagNames = existingTags.stream().map(Tag::getName)
+                .collect(Collectors.toSet());
+
+        List<Tag> newTags = tagNames.stream().filter(name -> !existingTagNames.contains(name))
+                .map(name -> Tag.builder()
+                        .name(name)
+                        .posts(new HashSet<>())
+                        .build())
+                .toList();
+
+        List<Tag> savedTags = new ArrayList<>();
+        if(!newTags.isEmpty()) {
+            savedTags = tagRepository.saveAll(newTags);
+        }
+
+        savedTags.addAll(existingTags);
+
+        return savedTags;
     }
 }
