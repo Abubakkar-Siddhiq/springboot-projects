@@ -1,5 +1,7 @@
 package com.monkey.blog.mappers;
 
+import com.monkey.blog.domain.CreatePostRequest;
+import com.monkey.blog.domain.dtos.CreatePostRequestDto;
 import com.monkey.blog.domain.dtos.PostDto;
 import com.monkey.blog.domain.entity.Post;
 import org.mapstruct.Mapper;
@@ -13,4 +15,6 @@ public interface PostMapper {
     @Mapping(target = "category", source = "category")
     @Mapping(target = "tags", source = "tags")
     PostDto toDto(Post post);
+
+    CreatePostRequest toCreatePostRequest(CreatePostRequestDto dto);
 }
