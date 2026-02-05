@@ -4,6 +4,7 @@ import com.monkey.blog.domain.PostStatus;
 import com.monkey.blog.domain.entity.Category;
 import com.monkey.blog.domain.entity.Post;
 import com.monkey.blog.domain.entity.Tag;
+import com.monkey.blog.domain.entity.User;
 import com.monkey.blog.repositories.PostRepository;
 import com.monkey.blog.services.CategoryService;
 import com.monkey.blog.services.PostService;
@@ -46,12 +47,17 @@ public class PostServiceImpl implements PostService {
 
         if(tagId != null) {
             Tag tag = tagService.getTagById(tagId);
-            return postRepository.findAllByStatusAndTag(
+            return postRepository.findAllByStatusAndTagsContaining(
                     PostStatus.PUBLISHED,
                     tag
             );
         }
 
         return postRepository.findAllByStatus(PostStatus.PUBLISHED);
+    }
+
+    @Override
+    public List<Post> getDraftPosts(User user) {
+        return postRepository.findAllByAuthorAndStatus(user, PostStatus.DRAFT);
     }
 }
