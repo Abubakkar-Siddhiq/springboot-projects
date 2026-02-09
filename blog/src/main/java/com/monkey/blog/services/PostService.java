@@ -1,6 +1,7 @@
 package com.monkey.blog.services;
 
 import com.monkey.blog.domain.CreatePostRequest;
+import com.monkey.blog.domain.UpdatePostRequest;
 import com.monkey.blog.domain.entity.Post;
 import com.monkey.blog.domain.entity.User;
 
@@ -11,4 +12,5 @@ public interface PostService {
     List<Post> getAllPosts(UUID categoryId, UUID tagId);
     List<Post> getDraftPosts(User user);
     Post createPost(User user, CreatePostRequest createPostRequest);
+    Post updatePost(UUID id, UpdatePostRequest updatePostRequest);
 }
