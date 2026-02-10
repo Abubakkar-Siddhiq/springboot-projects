@@ -19,7 +19,7 @@ public class PostDto {
     private String title;
     private String content;
     private AuthorDto author;
-    private CategoryDto categoryDto;
+    private CategoryDto category;
     private Set<TagDto> tags;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
